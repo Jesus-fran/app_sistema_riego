@@ -11,7 +11,7 @@ class ListaHumedad extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Valores de humedad'),
+        title: const Text('Valores de humedad'),
       ),
       body: FutureBuilder(
         future: productoProvider.leer(),
@@ -22,7 +22,7 @@ class ListaHumedad extends StatelessWidget {
                 itemCount: items!.length,
                 itemBuilder: (context, pos) => _crearItem(items[pos]));
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
@@ -34,7 +34,7 @@ class ListaHumedad extends StatelessWidget {
         DateTime.fromMillisecondsSinceEpoch(sensorModelo.fecha * 1000);
 
     return ListTile(
-      title: Text('Fecha: ${date1}'),
+      title: Text('Fecha: $date1'),
       trailing: Text('Valor: ${sensorModelo.valor}'),
     );
   }

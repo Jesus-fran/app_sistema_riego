@@ -8,7 +8,7 @@ class Error404Page extends StatelessWidget {
     return Scaffold(
       body: Container(
         color: Colors.red,
-        child: Center(
+        child: const Center(
           child: ListTile(
             title: Text('Error 404',
                 style: TextStyle(

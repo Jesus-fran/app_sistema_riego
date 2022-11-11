@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Loginpage extends StatefulWidget {
+  const Loginpage({super.key});
+
   @override
   State<Loginpage> createState() => _LoginpageState();
 }
@@ -16,12 +18,12 @@ class _LoginpageState extends State<Loginpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: const Text("Login"),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
           child: Form(
             key: _formfield,
             child: Column(
@@ -33,11 +35,11 @@ class _LoginpageState extends State<Loginpage> {
                   height: 200,
                   width: 200,
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   controller: emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email),
@@ -51,18 +53,20 @@ class _LoginpageState extends State<Loginpage> {
                       return "Ingrese un email";
                     } else if (!emailValid) {
                       return "Enter Valid Email";
+                    } else {
+                      return null;
                     }
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   controller: passController,
                   obscureText: passToggle,
                   decoration: InputDecoration(
                     labelText: "Password",
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.lock),
                     suffixIcon: InkWell(
                       onTap: () {
                         setState(() {
@@ -78,14 +82,16 @@ class _LoginpageState extends State<Loginpage> {
                       return "Ingrese una contraseña";
                     } else if (passController.text.length < 6) {
                       return "La contraseña Debe tener más de 6 caracteres";
+                    } else {
+                      return null;
                     }
                   },
                 ),
-                SizedBox(height: 60),
+                const SizedBox(height: 60),
                 InkWell(
                   onTap: () {
                     if (_formfield.currentState!.validate()) {
-                      print("datos login agregado correctamente");
+                      debugPrint("datos login agregado correctamente");
                       emailController.clear();
                       passController.clear();
                       Navigator.pushNamed(context, '/home');
@@ -97,7 +103,7 @@ class _LoginpageState extends State<Loginpage> {
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "Iniciar Sesion",
                         style: TextStyle(
@@ -109,11 +115,11 @@ class _LoginpageState extends State<Loginpage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Has olvidado tu contraseña?",
                       style: TextStyle(
                         fontSize: 17,
@@ -121,7 +127,7 @@ class _LoginpageState extends State<Loginpage> {
                     ),
                     TextButton(
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           "recuperar",
                           style: TextStyle(
                             fontSize: 18,

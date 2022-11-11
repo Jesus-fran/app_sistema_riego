@@ -5,22 +5,24 @@ import 'package:practica_apis/src/pages/mapa.dart';
 
 class ListaPage extends StatelessWidget {
   // ListaPage({Key key}) : super(key: key);
-  ListaPage({super.key});
+  const ListaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Center(
+            title: const Center(
           child: Text("Sistema de riego"),
         )),
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
               DrawerHeader(
+                decoration: const BoxDecoration(color: Colors.green),
+                margin: const EdgeInsets.only(bottom: 50),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       "EcoTic",
                       style: TextStyle(color: Colors.white, fontSize: 30),
@@ -32,16 +34,14 @@ class ListaPage extends StatelessWidget {
                     )
                   ],
                 ),
-                decoration: BoxDecoration(color: Colors.green),
-                margin: EdgeInsets.only(bottom: 50),
               ),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.water_drop,
                   size: 30,
                   color: Color.fromARGB(255, 35, 196, 207),
                 ),
-                title: Text(
+                title: const Text(
                   "Humedad",
                   style: TextStyle(fontSize: 20),
                 ),
@@ -52,19 +52,21 @@ class ListaPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.add_location,
                   size: 30,
                   color: Color.fromARGB(255, 26, 163, 56),
                 ),
-                title: Text(
+                title: const Text(
                   "Localizacion",
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MapaEcotic()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MapaEcotic()));
                 },
               ),
             ],

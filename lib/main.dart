@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practica_apis/routes/routes.dart';
-import 'package:practica_apis/widgets/Error404.dart';
+import 'package:practica_apis/widgets/error404.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            builder: (BuildContext context) => Error404Page());
+            builder: (BuildContext context) => const Error404Page());
       },
     );
   }

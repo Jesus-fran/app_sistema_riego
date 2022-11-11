@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 SensorModelo sensorModeloFromJson(String str) =>
     SensorModelo.fromJson(json.decode(str));
