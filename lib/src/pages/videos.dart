@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:youtube_api/youtube_api.dart';
@@ -12,13 +10,16 @@ class Videos extends StatefulWidget {
 }
 
 class _VideosState extends State<Videos> {
-  static String api_key = "AIzaSyAtUPqzUjI2ojILwMHJd23xxivExtI9oww";
-
+  static String api_key = "AIzaSyBj7MhCqMS-6JJ4W6BdArLmw2SSwXXKJxY";
+  String busqueda = "Sistema de riego";
   YoutubeAPI youtube = YoutubeAPI(api_key, type: "Video");
   List<YouTubeVideo> videoResult = [];
 
-  Future<List<YouTubeVideo>> callAPI(String text) async {
-    String query = text;
+  Future<List<YouTubeVideo>> callAPI() async {
+    String query = busqueda;
+    if (query == "") {
+      query = "Sistema de riego";
+    }
     videoResult = await youtube.search(
       query,
       type: "Video",
@@ -29,6 +30,12 @@ class _VideosState extends State<Videos> {
   }
 
   Future<void> _abreVideo(BuildContext context, String url) async {
+    SnackBar snack_1 = const SnackBar(
+      content: Text("Abriendo..."),
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snack_1);
+
     if (!await launchUrlString(url)) {
       SnackBar snack = const SnackBar(
         content: Text("No se pudo abrir el video :c"),
@@ -48,7 +55,7 @@ class _VideosState extends State<Videos> {
 
   Widget _body() {
     return FutureBuilder<List<YouTubeVideo>>(
-        future: callAPI("Nach"),
+        future: callAPI(),
         builder:
             (BuildContext context, AsyncSnapshot<List<YouTubeVideo>> snapshot) {
           if (snapshot.hasData) {
@@ -69,58 +76,91 @@ class _VideosState extends State<Videos> {
         child: Column(
           children: [
             const Divider(
-              height: 40,
+              height: 100,
               color: Color.fromARGB(255, 38, 133, 69),
             ),
             const Center(
               child: Text(
-                "Videos de Youtube",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                "Videos de EcoTic",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 26, 77, 27)),
               ),
             ),
-            // videoResult.map<Widget>(_listaVideos).toList()
-            _listaVideos(video.toList()),
+            const Divider(
+              height: 50,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
+            _buscador(),
+            const Divider(
+              height: 100,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
+            _listadeVideos(video.toList()),
           ],
         ),
       ),
     );
   }
 
-  Widget _listaVideos(List<YouTubeVideo> videos) {
+  Widget _listadeVideos(List<YouTubeVideo> videos) {
     return ListView.separated(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: (context, index) => ListTile(
-              leading: IconButton(
-                icon: ClipRRect(
-                  child: Image.network(
-                    'https://img.youtube.com/vi/${Uri.parse(videos[index].url).queryParameters['v']}/0.jpg',
-                    frameBuilder:
-                        (context, child, frame, wasSynchronouslyLoaded) {
-                      if (wasSynchronouslyLoaded) {
-                        return child;
-                      }
-                      return AnimatedOpacity(
-                        opacity: frame == null ? 0 : 1,
-                        duration: const Duration(seconds: 1),
-                        curve: Curves.easeOut,
-                        child: child,
-                      );
-                    },
-                  ),
-                ),
-                onPressed: () {
-                  String url = videos[index].url;
-                  _abreVideo(context, url);
-                  debugPrint(url);
-                },
-                iconSize: 100,
-              ),
-              title: Text(videos[index].title),
+      primary: false,
+      shrinkWrap: true,
+      itemBuilder: (context, index) => ListTile(
+        title: Image.network(
+          'https://img.youtube.com/vi/${Uri.parse(videos[index].url).queryParameters['v']}/0.jpg',
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) {
+              return child;
+            }
+            return AnimatedOpacity(
+              opacity: frame == null ? 0 : 1,
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeOut,
+              child: child,
+            );
+          },
+        ),
+        subtitle: Text(
+          videos[index].title,
+          style: const TextStyle(
+              fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        onTap: () {
+          String url = videos[index].url;
+          _abreVideo(context, url);
+          debugPrint(url);
+        },
+      ),
+      itemCount: videos.length,
+      separatorBuilder: (context, index) => const Divider(
+        color: Colors.green,
+        height: 50,
+      ),
+    );
+  }
+
+  Widget _buscador() {
+    double width = MediaQuery.of(context).size.width * 0.88;
+    return Row(
+      children: [
+        SizedBox(
+          width: width,
+          child: TextField(
+            textAlign: TextAlign.center,
+            decoration: const InputDecoration(
+              labelText: "Buscar un video",
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.search),
             ),
-        separatorBuilder: (context, index) => const Divider(
-              color: Colors.blue,
-            ),
-        itemCount: videos.length);
+            onChanged: (value) {
+              busqueda = value;
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
