@@ -38,7 +38,7 @@ class _MapsServiceState extends State<MapaEcotic> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToTheLake,
-        label: const Text('Ubicar ecotic'),
+        label: const Text('Ubicar EcoTic'),
         icon: const Icon(Icons.location_on),
       ),
     );

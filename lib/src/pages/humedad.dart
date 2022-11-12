@@ -22,7 +22,7 @@ class ListaHumedad extends StatelessWidget {
                 itemCount: items!.length,
                 itemBuilder: (context, pos) => _crearItem(items[pos]));
           } else {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -32,9 +32,11 @@ class ListaHumedad extends StatelessWidget {
   _crearItem(SensorModelo sensorModelo) {
     final DateTime date1 =
         DateTime.fromMillisecondsSinceEpoch(sensorModelo.fecha * 1000);
-
+    String fecha = "${date1.day}-${date1.month}-${date1.year}";
+    String tiempo = "${date1.hour}:${date1.minute}:${date1.second}";
     return ListTile(
-      title: Text('Fecha: $date1'),
+      title: Text('Fecha: $fecha'),
+      subtitle: Text(tiempo),
       trailing: Text('Valor: ${sensorModelo.valor}'),
     );
   }
