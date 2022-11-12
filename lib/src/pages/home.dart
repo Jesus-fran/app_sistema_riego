@@ -69,6 +69,21 @@ class ListaPage extends StatelessWidget {
                           builder: (context) => const MapaEcotic()));
                 },
               ),
+              ListTile(
+                leading: const Icon(
+                  Icons.video_collection,
+                  size: 30,
+                  color: Colors.red,
+                ),
+                title: const Text(
+                  "Videos",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/videos');
+                },
+              )
             ],
           ),
         ),
