@@ -47,8 +47,10 @@ class ListaPage extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ListaHumedad()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ListaHumedad()));
                 },
               ),
               ListTile(

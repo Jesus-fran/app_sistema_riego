@@ -10,7 +10,7 @@ class Error404Page extends StatelessWidget {
         color: Colors.red,
         child: const Center(
           child: ListTile(
-            title: Text('Error 404',
+            title: Text('Error 404 :(',
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

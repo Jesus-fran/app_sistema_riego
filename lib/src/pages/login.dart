@@ -94,7 +94,8 @@ class _LoginpageState extends State<Loginpage> {
                       debugPrint("datos login agregado correctamente");
                       emailController.clear();
                       passController.clear();
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/home');
+                      // Navigator.pushNamed(context, '/home');
                     }
                   },
                   child: Container(
@@ -105,7 +106,7 @@ class _LoginpageState extends State<Loginpage> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Iniciar Sesion",
+                        "Iniciar sesión",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -120,7 +121,7 @@ class _LoginpageState extends State<Loginpage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Has olvidado tu contraseña?",
+                      "¿Has olvidado tu contraseña?",
                       style: TextStyle(
                         fontSize: 17,
                       ),
