@@ -8,7 +8,7 @@ import 'package:practica_apis/src/pages/videos.dart';
 Map<String, WidgetBuilder> getApplicationRoutes() {
   return <String, WidgetBuilder>{
     '/home': (BuildContext context) => const ListaPage(),
-    '/humedad': (BuildContext context) => const ListaHumedad(),
+    '/humedad': (BuildContext context) => const Humedad(),
     '/login': (BuildContext context) => const Loginpage(),
     '/localizacion': (BuildContext context) => const MapaEcotic(),
     '/videos': (BuildContext context) => const Videos(),
