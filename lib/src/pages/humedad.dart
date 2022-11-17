@@ -115,6 +115,21 @@ class _ListaHumedadState extends State<ListaHumedad> {
     Map<String, double> dataMap = {
       "Humedad": 100 - (((datos[0].valor) / 1023) * 100).round().toDouble(),
     };
+    String msgHum = "";
+    String msgAdvert = "";
+    Color colorIcon = const Color.fromARGB(255, 33, 212, 243);
+    if (datos[0].valor <= 199) {
+      msgHum = "HUMEDAD MUY ALTA";
+      msgAdvert = "¡ALERTA! ";
+      colorIcon = const Color.fromARGB(255, 0, 212, 250);
+    } else if (datos[0].valor >= 200 && datos[0].valor <= 699) {
+      msgHum = "HUMEDAD ÓPTIMA";
+      colorIcon = const Color.fromARGB(255, 33, 212, 243);
+    } else {
+      msgHum = "HUMEDAD BAJA";
+      colorIcon = Colors.yellow.shade300;
+    }
+
     return Column(
       children: [
         const Divider(
@@ -176,6 +191,33 @@ class _ListaHumedadState extends State<ListaHumedad> {
               "  Hace $tiempoRegistrado",
               style: const TextStyle(
                   color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        const Divider(
+          height: 30,
+          color: Color.fromARGB(0, 255, 255, 255),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.water_drop_rounded,
+              color: colorIcon,
+            ),
+            RichText(
+              text: TextSpan(
+                text: msgAdvert,
+                style: TextStyle(
+                    color: Colors.red.shade300, fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                    text: msgHum,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           ],
         )
