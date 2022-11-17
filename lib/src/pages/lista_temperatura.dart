@@ -45,38 +45,39 @@ class _ListaTemperaturaState extends State<ListaTemperatura> {
           ),
           Expanded(
               child: RefreshIndicator(
-            onRefresh: () {
-              return Future(() {
-                setState(() {
-                  debugPrint("Actualiza historial");
-                });
-              });
-            },
-            child: ListView.separated(
-              primary: false,
-              shrinkWrap: true,
-              itemBuilder: (context, index) => ListTile(
-                leading: const Icon(Icons.thermostat,
-                    color: Color.fromARGB(255, 243, 212, 33)),
-                title: Text("${datos[index].valor} °C"),
-                subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          "Fecha: ${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).day.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).month.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).year.toString()}"),
-                      Text(
-                          "Hora: ${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).hour.toString()}:${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).minute.toString()}:${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).second.toString()}"),
-                    ]),
-                // trailing: Text(
-                //     "Fecha: ${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).day.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).month.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).year.toString()}"),
-              ),
-              itemCount: datos.length,
-              separatorBuilder: (context, index) => const Divider(
-                color: Color.fromARGB(255, 179, 180, 179),
-                height: 50,
-              ),
-            ),
-          ))
+                  onRefresh: () {
+                    return Future(() {
+                      setState(() {
+                        debugPrint("Actualiza historial");
+                      });
+                    });
+                  },
+                  child: Scrollbar(
+                    child: ListView.separated(
+                      primary: false,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => ListTile(
+                        leading: const Icon(Icons.thermostat,
+                            color: Color.fromARGB(255, 243, 212, 33)),
+                        title: Text("${datos[index].valor} °C"),
+                        subtitle: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                  "Fecha: ${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).day.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).month.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).year.toString()}"),
+                              Text(
+                                  "Hora: ${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).hour.toString()}:${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).minute.toString()}:${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).second.toString()}"),
+                            ]),
+                        // trailing: Text(
+                        //     "Fecha: ${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).day.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).month.toString()}-${DateTime.fromMillisecondsSinceEpoch(datos[index].fecha * 1000).year.toString()}"),
+                      ),
+                      itemCount: datos.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        color: Color.fromARGB(255, 179, 180, 179),
+                        height: 50,
+                      ),
+                    ),
+                  )))
         ],
       ),
     );
