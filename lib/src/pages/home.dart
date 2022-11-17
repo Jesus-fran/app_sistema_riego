@@ -100,7 +100,7 @@ class ListaPage extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ListaTemperatura()));
+                          builder: (context) => const Temperatura()));
                 },
               ),
             ],
