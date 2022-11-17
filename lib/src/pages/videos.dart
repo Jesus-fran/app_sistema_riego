@@ -10,9 +10,9 @@ class Videos extends StatefulWidget {
 }
 
 class _VideosState extends State<Videos> {
-  static String ApiKey = "AIzaSyBj7MhCqMS-6JJ4W6BdArLmw2SSwXXKJxY";
   String busqueda = "Sistema de riego";
-  YoutubeAPI youtube = YoutubeAPI(ApiKey, type: "Video");
+  YoutubeAPI youtube =
+      YoutubeAPI("AIzaSyBj7MhCqMS-6JJ4W6BdArLmw2SSwXXKJxY", type: "Video");
   List<YouTubeVideo> videoResult = [];
 
   Future<List<YouTubeVideo>> callAPI() async {

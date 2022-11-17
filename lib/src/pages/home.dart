@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:practica_apis/src/pages/humedad.dart';
 import 'package:practica_apis/src/pages/mapa.dart';
+import 'package:practica_apis/src/pages/temperatura.dart';
 
 class ListaPage extends StatelessWidget {
   // ListaPage({Key key}) : super(key: key);
@@ -85,7 +86,25 @@ class ListaPage extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/videos');
                 },
-              )
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.thermostat,
+                  size: 30,
+                  color: Color.fromARGB(255, 231, 227, 10),
+                ),
+                title: const Text(
+                  "Temperatura",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ListaTemperatura()));
+                },
+              ),
             ],
           ),
         ),

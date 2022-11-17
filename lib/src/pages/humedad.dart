@@ -32,7 +32,7 @@ class _ListaHumedadState extends State<ListaHumedad> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("Humedad")),
+        title: const Center(child: Text("Humedad actual")),
         actions: [
           IconButton(
               tooltip: "Actualizar datos",
@@ -173,7 +173,7 @@ class _ListaHumedadState extends State<ListaHumedad> {
               color: Colors.blue,
             ),
             Text(
-              "Hace $tiempoRegistrado",
+              "  Hace $tiempoRegistrado",
               style: const TextStyle(
                   color: Colors.white, fontWeight: FontWeight.bold),
             ),
