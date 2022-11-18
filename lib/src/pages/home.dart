@@ -36,7 +36,7 @@ class ListaPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(
+              const Text(
                 "Monitoreo",
                 style: TextStyle(
                     color: Color.fromARGB(255, 24, 129, 89),
@@ -77,11 +77,35 @@ class ListaPage extends StatelessWidget {
                           builder: (context) => const Temperatura()));
                 },
               ),
+              ListTile(
+                leading: const Icon(
+                  Icons.sensors_rounded,
+                  size: 30,
+                  color: Color.fromARGB(255, 100, 100, 100),
+                ),
+                title: const Text(
+                  "Sensores",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.device_hub,
+                  size: 30,
+                  color: Color.fromARGB(255, 40, 59, 85),
+                ),
+                title: const Text(
+                  "Actuadores",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {},
+              ),
               const Divider(
                 height: 10,
                 color: Color.fromARGB(50, 151, 151, 151),
               ),
-              Text(
+              const Text(
                 "Empresa",
                 style: TextStyle(
                     color: Color.fromARGB(255, 24, 129, 89),
@@ -119,6 +143,31 @@ class ListaPage extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/videos');
+                },
+              ),
+              const Divider(
+                height: 10,
+                color: Color.fromARGB(50, 151, 151, 151),
+              ),
+              const Text(
+                "Cuenta",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 24, 129, 89),
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.exit_to_app,
+                  size: 30,
+                  color: Colors.green,
+                ),
+                title: const Text(
+                  "Cerrar sesión",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],
