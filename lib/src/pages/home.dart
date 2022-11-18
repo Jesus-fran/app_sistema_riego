@@ -119,7 +119,7 @@ class ListaPage extends StatelessWidget {
                   color: Color.fromARGB(255, 26, 163, 56),
                 ),
                 title: const Text(
-                  "Localizacion",
+                  "Localización",
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
