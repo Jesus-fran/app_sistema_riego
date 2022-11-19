@@ -4,6 +4,20 @@ SensoresModelo sensoresModeloFromJson(String str) =>
     SensoresModelo.fromJson(json.decode(str));
 
 String sensoresModeloToJson(SensoresModelo data) => json.encode(data.toJson());
+List<String> meses = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre"
+];
 
 class SensoresModelo {
   bool activo;
