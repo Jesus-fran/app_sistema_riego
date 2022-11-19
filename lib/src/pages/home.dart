@@ -87,7 +87,10 @@ class ListaPage extends StatelessWidget {
                   "Sensores",
                   style: TextStyle(fontSize: 20),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(context, '/sensores');
+                },
               ),
               ListTile(
                 leading: const Icon(
