@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:practica_apis/src/models/actuadores_modelo.dart';
 import 'package:practica_apis/src/models/sensor_modelo.dart';
 import 'package:practica_apis/src/models/sensores_modelo.dart';
 
@@ -98,5 +99,19 @@ class SensorProvider {
       editado = true;
     }
     return editado;
+  }
+
+  Future<List<ActuadoresModelo>> getActuadores() async {
+    final List<ActuadoresModelo> lista = [];
+    //Falta optimizar la consulta
+    final url =
+        '$_url/actuadores/valvula.json?orderBy="fecha_hora"&limitToLast=1&print=pretty';
+    final respuesta = await http.get(Uri.parse(url));
+    final Map<String, dynamic> data = json.decode(respuesta.body);
+    data.forEach((key, value) {
+      ActuadoresModelo actuadoresModelo = ActuadoresModelo.fromJson(value);
+      lista.add(actuadoresModelo);
+    });
+    return lista;
   }
 }

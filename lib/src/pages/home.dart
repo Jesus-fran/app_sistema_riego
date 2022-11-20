@@ -102,7 +102,10 @@ class ListaPage extends StatelessWidget {
                   "Actuadores",
                   style: TextStyle(fontSize: 20),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(context, '/actuadores');
+                },
               ),
               const Divider(
                 height: 10,

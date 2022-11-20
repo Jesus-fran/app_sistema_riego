@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practica_apis/src/pages/actuadores.dart';
 import 'package:practica_apis/src/pages/home.dart';
 import 'package:practica_apis/src/pages/humedad.dart';
 import 'package:practica_apis/src/pages/login.dart';
@@ -14,5 +15,6 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     '/localizacion': (BuildContext context) => const MapaEcotic(),
     '/videos': (BuildContext context) => const Videos(),
     '/sensores': (BuildContext context) => const Sensores(),
+    '/actuadores': (BuildContext context) => const Actuadores(),
   };
 }
