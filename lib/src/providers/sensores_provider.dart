@@ -101,11 +101,11 @@ class SensorProvider {
     return editado;
   }
 
-  Future<List<ActuadoresModelo>> getActuadores() async {
+  Future<List<ActuadoresModelo>> getHistorialValvula() async {
     final List<ActuadoresModelo> lista = [];
     //Falta optimizar la consulta
     final url =
-        '$_url/actuadores/valvula.json?orderBy="fecha_hora"&limitToLast=1&print=pretty';
+        '$_url/actuadores/valvula/historial.json?orderBy="fecha_hora"&limitToLast=1&print=pretty';
     final respuesta = await http.get(Uri.parse(url));
     final Map<String, dynamic> data = json.decode(respuesta.body);
     data.forEach((key, value) {
@@ -113,5 +113,33 @@ class SensorProvider {
       lista.add(actuadoresModelo);
     });
     return lista;
+  }
+
+  Future<List<ActuadoresModelo>> getAccionValvula() async {
+    final List<ActuadoresModelo> lista = [];
+    //Falta optimizar la consulta
+    final url = '$_url/actuadores/valvula/accion.json';
+    final respuesta = await http.get(Uri.parse(url));
+    final Map<String, dynamic> data = json.decode(respuesta.body);
+    // print(data);
+    ActuadoresModelo actuadoresModelo = ActuadoresModelo.fromJson(data);
+    lista.add(actuadoresModelo);
+    // data.forEach((key, value) {
+    //   ActuadoresModelo actuadoresModelo = ActuadoresModelo.fromJson(value);
+    //   lista.add(actuadoresModelo);
+    // });
+    return lista;
+  }
+
+  Future<bool> registrarEncendido(ActuadoresModelo datos) async {
+    //variables
+    bool editado = false;
+    final url = '$_url/actuadores/valvula/accion.json';
+    final respuesta =
+        await http.put(Uri.parse(url), body: actuadoresModeloToJson(datos));
+    if (respuesta.statusCode == 200) {
+      editado = true;
+    }
+    return editado;
   }
 }

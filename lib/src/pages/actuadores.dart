@@ -65,7 +65,7 @@ class _ActuadoresState extends State<Actuadores> {
           ],
         ),
         FutureBuilder(
-          future: SensorProvider().getActuadores(),
+          future: SensorProvider().getHistorialValvula(),
           builder: (BuildContext context,
               AsyncSnapshot<List<ActuadoresModelo>> snapshot) {
             if (snapshot.hasData) {

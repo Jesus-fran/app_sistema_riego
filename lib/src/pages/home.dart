@@ -3,10 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:practica_apis/src/pages/humedad.dart';
 import 'package:practica_apis/src/pages/mapa.dart';
 import 'package:practica_apis/src/pages/temperatura.dart';
+import 'package:practica_apis/src/providers/sensores_provider.dart';
 
-class ListaPage extends StatelessWidget {
+import '../models/actuadores_modelo.dart';
+
+class ListaPage extends StatefulWidget {
   // ListaPage({Key key}) : super(key: key);
   const ListaPage({super.key});
+
+  @override
+  State<ListaPage> createState() => _ListaPageState();
+}
+
+class _ListaPageState extends State<ListaPage> {
+  bool loanding = false;
+  ActuadoresModelo actuadoresModelo = ActuadoresModelo();
 
   @override
   Widget build(BuildContext context) {
@@ -180,11 +191,180 @@ class ListaPage extends StatelessWidget {
           ),
         ),
         body: Center(
-          child: Image.asset(
-            "images/logo2.jpg",
-            height: 200,
-            width: 200,
-          ),
+          child: _body(),
         ));
+  }
+
+  Widget _body() {
+    return Column(
+      children: [
+        const Divider(
+          height: 100,
+          color: Colors.transparent,
+        ),
+        Expanded(
+            child: RefreshIndicator(
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    const Center(
+                      child: Text(
+                        "Regar por 5 segundos",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    loanding == true
+                        ? const LinearProgressIndicator()
+                        : _getButton(),
+                  ],
+                ),
+                onRefresh: () {
+                  return Future(() {
+                    setState(() {
+                      debugPrint("Actualiza historial");
+                    });
+                  });
+                }))
+      ],
+    );
+  }
+
+  Widget _getButton() {
+    return FutureBuilder(
+      future: SensorProvider().getHistorialValvula(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<ActuadoresModelo>> snapshot) {
+        if (snapshot.hasData) {
+          return FutureBuilder(
+            future: SensorProvider().getAccionValvula(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<ActuadoresModelo>> snapshot1) {
+              if (snapshot1.hasData) {
+                return _button(snapshot.data!, snapshot1.data!);
+              } else {
+                return const LinearProgressIndicator();
+              }
+            },
+          );
+          // return _button(snapshot.data!);
+        } else {
+          return const LinearProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _button(List<ActuadoresModelo> datos1, List<ActuadoresModelo> datos2) {
+    if (datos1[0].activo == false) {
+      // Si es false, significa que la electrovalvula está apagada
+      int fechaHoraFb = datos2[0].fechaHora * 1000;
+      int fechaHoraAct = DateTime.now().millisecondsSinceEpoch;
+      if (fechaHoraAct < fechaHoraFb && datos2[0].activo == true) {
+        // Si aun no llega el tiempo (si el tiempo actual es menor al de FBS) que está registrado, y si es true.
+        // significa que hay un riego programado.
+        Duration fechaHoraDif = DateTimeRange(
+                start: DateTime.fromMillisecondsSinceEpoch(fechaHoraAct),
+                end: DateTime.fromMillisecondsSinceEpoch(fechaHoraFb))
+            .duration;
+        // print(fechaHoraFb);
+        // print(DateTime.fromMillisecondsSinceEpoch(fechaHoraFb));
+        return Column(
+          children: [
+            const Divider(
+              height: 60,
+              color: Color.fromRGBO(252, 117, 117, 0),
+            ),
+            const Text("Tiempo faltante: ",
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+            // Text(DateTime.fromMillisecondsSinceEpoch(fechaHoraFb).toString()),
+            const Divider(
+              height: 10,
+              color: Colors.transparent,
+            ),
+            Text(fechaHoraDif.inSeconds.toString(),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          ],
+        );
+      } else {
+        //Si el tiempo ya pasó (tiempo actual es mayor al de FBS) significa que la electrovalvula está apagada
+        //Significa que puede programarse un riego
+        return Column(
+          children: [
+            const Divider(
+              height: 60,
+              color: Colors.transparent,
+            ),
+            // const Text("Tiempo: ",
+            //     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+            // // Text(DateTime.fromMillisecondsSinceEpoch(fechaHoraFb).toString()),
+            // const Divider(
+            //   height: 10,
+            //   color: Colors.transparent,
+            // ),
+            // Text((fechaHoraAct ~/ 1000).toString(),
+            //     style:
+            //         const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            Switch(
+              activeColor: Colors.green,
+              value: datos1[0].activo,
+              onChanged: (value) {
+                _showDialog();
+              },
+            ),
+          ],
+        );
+      }
+    } else {
+      // Si no es false, entonces es true, significa que está regando...
+      return const Center(
+        child: Text("Regando...",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      );
+    }
+  }
+
+  Future<void> _showDialog() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("¿Estás seguro de regar la planta?"),
+            content: const Text(
+                "La electroválvula se encenderá por 5 segundos aproximadamente"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("NO"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // _regar();
+                  Navigator.of(context).pop();
+                  setState(() {
+                    loanding = true;
+                  });
+                  actuadoresModelo.activo = true;
+                  int fechaHoraAct =
+                      DateTime.now().millisecondsSinceEpoch + 40000;
+                  actuadoresModelo.fechaHora = fechaHoraAct ~/ 1000;
+                  // print(fechaHoraAct);
+                  Future<bool> status =
+                      SensorProvider().registrarEncendido(actuadoresModelo);
+                  status.then((value) => {
+                        setState(() {
+                          loanding = false;
+                        })
+                      });
+                },
+                child: const Text("SI"),
+              ),
+            ],
+          );
+        });
   }
 }
