@@ -39,7 +39,8 @@ class _TemperaturaState extends State<Temperatura> {
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 52, 121, 155),
           image: DecorationImage(
-              image: AssetImage("images/fondo_temp.jpg"), fit: BoxFit.cover),
+              image: AssetImage("images/fondo_temperatura1.jpg"),
+              fit: BoxFit.cover),
         ),
         child: _currentTemperatura(),
       ),
