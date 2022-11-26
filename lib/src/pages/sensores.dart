@@ -11,9 +11,7 @@ class Sensores extends StatefulWidget {
 
 class _SensoresState extends State<Sensores> {
   bool active = false;
-  bool activeLm35 = false;
   String estado = "";
-  String estadoLm35 = "";
   String msgEstado = "";
   String msgContenido = "";
   SensoresModelo sensoresModelo = SensoresModelo();
@@ -21,207 +19,112 @@ class _SensoresState extends State<Sensores> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text("Sensores")),
-      ),
-      body: _getSensores(),
-    );
+        appBar: AppBar(
+          title: const Center(child: Text("Sensores")),
+        ),
+        body: _body());
   }
 
-  Widget _getSensores() {
-    final productoProvider = SensorProvider();
-    return FutureBuilder(
-        future: productoProvider.leerSensores(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<SensoresModelo>> snapshot) {
-          if (snapshot.hasData) {
-            return _body(snapshot.data!);
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
-  }
-
-  Widget _body(List<SensoresModelo> datos) {
-    DateTime fechaHora =
-        DateTime.fromMillisecondsSinceEpoch(datos[0].fechaHora * 1000);
-    DateTime fechaHora2 =
-        DateTime.fromMillisecondsSinceEpoch(datos[1].fechaHora * 1000);
-    if (datos[0].activo) {
-      estado = "Encendido";
-      active = true;
-      msgEstado = "apagar";
-      msgContenido = "";
-    } else {
-      estado = "Apagado";
-      active = false;
-      msgEstado = "encender";
-      msgContenido =
-          "Recuerda que mantener mucho tiempo encendido puede dañar la vida útil del Higrómetro";
-    }
-    if (datos[1].activo) {
-      estadoLm35 = "Encendido";
-      activeLm35 = true;
-    } else {
-      estadoLm35 = "Apagado";
-      activeLm35 = false;
-    }
-
-    return Column(
+  Widget _body() {
+    return ListView(
       children: [
         const Divider(
-          height: 60,
-          color: Color.fromARGB(50, 151, 151, 151),
+          height: 50,
+          color: Colors.transparent,
         ),
         const Text(
-          "Higrómetro",
+          "Higrómetro - FC28",
+          textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
-        const Divider(
-          height: 60,
-          color: Color.fromARGB(50, 151, 151, 151),
-        ),
-        Text("Fecha del útimo cambio",
-            style: TextStyle(
-                color: Colors.green.shade600,
-                fontWeight: FontWeight.bold,
-                fontSize: 15)),
-        const Divider(
-          height: 15,
-          color: Color.fromARGB(0, 151, 151, 151),
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.date_range_rounded,
-            size: 30,
-            color: Colors.black,
-          ),
-          title: RichText(
-              text: TextSpan(children: [
-            TextSpan(
-                text: fechaHora.day.toString(),
-                style: const TextStyle(color: Colors.green)),
-            const TextSpan(text: " de ", style: TextStyle(color: Colors.black)),
-            TextSpan(
-                text: meses[fechaHora.month - 1],
-                style: const TextStyle(color: Colors.green)),
-            const TextSpan(
-                text: " del ", style: TextStyle(color: Colors.black)),
-            TextSpan(
-                text: fechaHora.year.toString(),
-                style: const TextStyle(color: Colors.green)),
-            const TextSpan(
-                text: " a las  ", style: TextStyle(color: Colors.black)),
-            TextSpan(
-                text:
-                    "${fechaHora.hour.toString()}:${fechaHora.minute.toString()}:${fechaHora.second.toString()}",
-                style: const TextStyle(color: Colors.green)),
-          ])),
+        Image.asset(
+          "images/FC28.png",
+          height: 100,
+          width: 100,
         ),
         const Divider(
-          height: 15,
-          color: Color.fromARGB(0, 151, 151, 151),
+          height: 10,
+          color: Colors.transparent,
         ),
-        Text("Estado actual",
-            style: TextStyle(
-                color: Colors.green.shade600,
-                fontWeight: FontWeight.bold,
-                fontSize: 15)),
-        const Divider(
-          height: 15,
-          color: Color.fromARGB(0, 151, 151, 151),
+        const Text(
+          "Lee la humedad actual de la tierra",
+          textAlign: TextAlign.center,
+          style: TextStyle(),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(estado),
-            Switch(
-                activeColor: Colors.green,
-                value: active,
-                onChanged: (bool value) {
-                  active = value;
-                  _showDialog();
-                  // setState(() {
-                  //   _showDialog();
-                  // });
-                }),
+          children: const [
+            Padding(
+              padding: EdgeInsets.all(18.5),
+              child: Text(
+                "Detalles del sensor:",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+            )
           ],
+        ),
+        FutureBuilder(
+          future: SensorProvider().leerSensor("hum_higrometro"),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<SensoresModelo>> snapshot) {
+            if (snapshot.hasData) {
+              return _detalles(snapshot.data!, 0);
+            } else {
+              return const LinearProgressIndicator();
+            }
+          },
         ),
         const Divider(
           height: 60,
-          color: Color.fromARGB(158, 151, 151, 151),
+          color: Colors.grey,
         ),
         const Text(
           "LM35",
+          textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
         const Divider(
-          height: 60,
-          color: Color.fromARGB(50, 151, 151, 151),
+          height: 20,
+          color: Colors.transparent,
         ),
-        Text("Fecha del último cambio",
-            style: TextStyle(
-                color: Colors.green.shade600,
-                fontWeight: FontWeight.bold,
-                fontSize: 15)),
-        const Divider(
-          height: 15,
-          color: Color.fromARGB(0, 151, 151, 151),
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.date_range_rounded,
-            size: 30,
-            color: Colors.black,
-          ),
-          title: RichText(
-              text: TextSpan(children: [
-            TextSpan(
-                text: fechaHora2.day.toString(),
-                style: const TextStyle(color: Colors.green)),
-            const TextSpan(text: " de ", style: TextStyle(color: Colors.black)),
-            TextSpan(
-                text: meses[fechaHora2.month - 1],
-                style: const TextStyle(color: Colors.green)),
-            const TextSpan(
-                text: " del ", style: TextStyle(color: Colors.black)),
-            TextSpan(
-                text: fechaHora2.year.toString(),
-                style: const TextStyle(color: Colors.green)),
-            const TextSpan(
-                text: " a las  ", style: TextStyle(color: Colors.black)),
-            TextSpan(
-                text:
-                    "${fechaHora2.hour.toString()}:${fechaHora2.minute.toString()}:${fechaHora2.second.toString()}",
-                style: const TextStyle(color: Colors.green)),
-          ])),
+        Image.asset(
+          "images/lm35.png",
+          height: 100,
+          width: 100,
         ),
         const Divider(
-          height: 15,
-          color: Color.fromARGB(0, 151, 151, 151),
+          height: 10,
+          color: Colors.transparent,
         ),
-        Text("Estado actual",
-            style: TextStyle(
-                color: Colors.green.shade600,
-                fontWeight: FontWeight.bold,
-                fontSize: 15)),
-        const Divider(
-          height: 15,
-          color: Color.fromARGB(0, 151, 151, 151),
+        const Text(
+          "Lee la temperatura actual del ambiente",
+          textAlign: TextAlign.center,
+          style: TextStyle(),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(estadoLm35),
-            Switch(
-                activeColor: Colors.green,
-                value: activeLm35,
-                onChanged: (value) {
-                  _showDialogLm35();
-                }),
+          children: const [
+            Padding(
+              padding: EdgeInsets.all(18.5),
+              child: Text(
+                "Detalles del sensor:",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+            )
           ],
+        ),
+        FutureBuilder(
+          future: SensorProvider().leerSensor("temp_lm35"),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<SensoresModelo>> snapshot) {
+            if (snapshot.hasData) {
+              return _detalles(snapshot.data!, 1);
+            } else {
+              return const LinearProgressIndicator();
+            }
+          },
+        ),
+        const Divider(
+          height: 50,
+          color: Colors.transparent,
         ),
       ],
     );
@@ -301,5 +204,96 @@ class _SensoresState extends State<Sensores> {
             ],
           );
         });
+  }
+
+  Widget _detalles(List<SensoresModelo> datos, int numSensor) {
+    String fecha = "";
+    DateTime dateTime =
+        DateTime.fromMillisecondsSinceEpoch(datos[0].fechaHora * 1000);
+    fecha =
+        "${dateTime.day} de ${meses[dateTime.month - 1]} del ${dateTime.year}";
+
+    DateTime fechaHora =
+        DateTime.fromMillisecondsSinceEpoch(datos[0].fechaHora * 1000);
+
+    if (datos[0].activo) {
+      estado = "Encendido";
+      active = true;
+      msgEstado = "apagar";
+      msgContenido = "";
+    } else {
+      estado = "Apagado";
+      active = false;
+      msgEstado = "encender";
+      msgContenido =
+          "Recuerda que mantener mucho tiempo encendido puede dañar la vida útil del Higrómetro";
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 18.5, right: 18.5),
+              child: Text(
+                estado,
+              ),
+            ),
+            Switch(
+              activeColor: Colors.green,
+              value: active,
+              onChanged: numSensor == 1
+                  ? (value) {
+                      _showDialogLm35();
+                    }
+                  : (bool value) {
+                      active = value;
+                      _showDialog();
+                    },
+            ),
+          ],
+        ),
+        const Divider(
+          color: Colors.transparent,
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 18.5,
+                right: 18.5,
+              ),
+              child: Text(
+                "Fecha: ",
+              ),
+            ),
+            Text(fecha),
+          ],
+        ),
+        const Divider(
+          color: Colors.transparent,
+          height: 25,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 18.5,
+                right: 25.5,
+              ),
+              child: Text(
+                "Hora: ",
+              ),
+            ),
+            Text(
+                "${fechaHora.hour.toString()}:${fechaHora.minute.toString()}:${fechaHora.second.toString()}"),
+          ],
+        ),
+      ],
+    );
   }
 }

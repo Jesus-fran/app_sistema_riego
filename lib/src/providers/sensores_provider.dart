@@ -57,15 +57,13 @@ class SensorProvider {
     return lista;
   }
 
-  Future<List<SensoresModelo>> leerSensores() async {
+  Future<List<SensoresModelo>> leerSensor(String id) async {
     final List<SensoresModelo> lista = [];
-    final url = '$_url/sensores.json';
+    final url = '$_url/sensores/$id.json';
     final respuesta = await http.get(Uri.parse(url));
     final Map<String, dynamic> data = json.decode(respuesta.body);
-    data.forEach((key, value) {
-      SensoresModelo sensoresModelo = SensoresModelo.fromJson(value);
-      lista.add(sensoresModelo);
-    });
+    SensoresModelo sensoresModelo = SensoresModelo.fromJson(data);
+    lista.add(sensoresModelo);
     return lista;
   }
 

@@ -36,7 +36,7 @@ class _ActuadoresState extends State<Actuadores> {
           height: 30,
         ),
         Image.asset(
-          "images/electrovalvula.jpeg",
+          "images/electrovalvula.png",
           width: 150,
           height: 150,
         ),
@@ -95,10 +95,6 @@ class _ActuadoresState extends State<Actuadores> {
 
     return Column(
       children: [
-        // Divider(
-        //   color: Colors.transparent,
-        //   height: 10,
-        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
