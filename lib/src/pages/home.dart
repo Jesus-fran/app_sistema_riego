@@ -370,6 +370,7 @@ class _ListaPageState extends State<ListaPage> {
                 iconSize: 50,
                 onPressed: () {
                   debugPrint("Pulsado");
+                  _showDatePicker();
                 },
                 icon: Icon(
                   color: Colors.grey[350],
@@ -472,7 +473,14 @@ class _ListaPageState extends State<ListaPage> {
     );
   }
 
-  Widget _showDatePicker() {
-    return const Text("Hola");
+  _showDatePicker() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return TimePickerDialog(
+            initialTime: TimeOfDay.now(),
+          );
+        });
   }
 }
