@@ -4,7 +4,7 @@ import 'package:practica_apis/src/pages/humedad.dart';
 import 'package:practica_apis/src/pages/mapa.dart';
 import 'package:practica_apis/src/pages/temperatura.dart';
 import 'package:practica_apis/src/providers/sensores_provider.dart';
-
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import '../models/actuadores_modelo.dart';
 
 class ListaPage extends StatefulWidget {
@@ -17,6 +17,7 @@ class ListaPage extends StatefulWidget {
 
 class _ListaPageState extends State<ListaPage> {
   bool loanding = false;
+  int _duration = 10;
   ActuadoresModelo actuadoresModelo = ActuadoresModelo();
 
   @override
@@ -199,7 +200,7 @@ class _ListaPageState extends State<ListaPage> {
     return Column(
       children: [
         const Divider(
-          height: 100,
+          height: 50,
           color: Colors.transparent,
         ),
         Expanded(
@@ -207,13 +208,13 @@ class _ListaPageState extends State<ListaPage> {
                 child: ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: [
-                    const Center(
-                      child: Text(
-                        "Regar por 5 segundos",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                    // const Center(
+                    //   child: Text(
+                    //     "Regar plantas",
+                    //     style: TextStyle(
+                    //         fontSize: 15, fontWeight: FontWeight.bold),
+                    //   ),
+                    // ),
                     loanding == true
                         ? const LinearProgressIndicator()
                         : _getButton(),
@@ -225,7 +226,7 @@ class _ListaPageState extends State<ListaPage> {
                       debugPrint("Actualiza historial");
                     });
                   });
-                }))
+                })),
       ],
     );
   }
@@ -267,52 +268,113 @@ class _ListaPageState extends State<ListaPage> {
                 start: DateTime.fromMillisecondsSinceEpoch(fechaHoraAct),
                 end: DateTime.fromMillisecondsSinceEpoch(fechaHoraFb))
             .duration;
+
+        _duration = fechaHoraDif.inSeconds;
+        return _contador();
         // print(fechaHoraFb);
         // print(DateTime.fromMillisecondsSinceEpoch(fechaHoraFb));
-        return Column(
-          children: [
-            const Divider(
-              height: 60,
-              color: Color.fromRGBO(252, 117, 117, 0),
-            ),
-            const Text("Tiempo faltante: ",
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-            // Text(DateTime.fromMillisecondsSinceEpoch(fechaHoraFb).toString()),
-            const Divider(
-              height: 10,
-              color: Colors.transparent,
-            ),
-            Text(fechaHoraDif.inSeconds.toString(),
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-          ],
-        );
+        // return Column(
+        //   children: [
+        //     const Divider(
+        //       height: 60,
+        //       color: Color.fromRGBO(252, 117, 117, 0),
+        //     ),
+        //     const Text("Tiempo faltante: ",
+        //         style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+        //     // Text(DateTime.fromMillisecondsSinceEpoch(fechaHoraFb).toString()),
+        //     const Divider(
+        //       height: 10,
+        //       color: Colors.transparent,
+        //     ),
+        //     Text(fechaHoraDif.inSeconds.toString(),
+        //         style:
+        //             const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+        //   ],
+        // );
       } else {
         //Si el tiempo ya pasó (tiempo actual es mayor al de FBS) significa que la electrovalvula está apagada
         //Significa que puede programarse un riego
         return Column(
           children: [
             const Divider(
-              height: 60,
+              height: 10,
               color: Colors.transparent,
             ),
-            // const Text("Tiempo: ",
-            //     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-            // // Text(DateTime.fromMillisecondsSinceEpoch(fechaHoraFb).toString()),
-            // const Divider(
-            //   height: 10,
-            //   color: Colors.transparent,
-            // ),
-            // Text((fechaHoraAct ~/ 1000).toString(),
-            //     style:
-            //         const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            Switch(
-              activeColor: Colors.green,
-              value: datos1[0].activo,
-              onChanged: (value) {
-                _showDialog();
-              },
+            const Text(
+              "Activar el riego ahora mismo: ",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            const Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            const Icon(Icons.arrow_right_alt_rounded),
+            const Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "La electroválvula se activara por varios segundos y comenzará a pasar el flujo de agua para humedecer la tierra.",
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.justify,
+              ),
+            ),
+            SizedBox(
+              height: 70,
+              // width: 200,
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: Switch(
+                  // inactiveThumbColor: Colors.blueGrey.shade600,
+                  // inactiveTrackColor: Color.fromARGB(255, 216, 8, 8),
+                  activeColor: Colors.green,
+                  value: datos1[0].activo,
+                  onChanged: (value) {
+                    _showDialog();
+                  },
+                ),
+              ),
+            ),
+            const Divider(
+              height: 50,
+              color: Colors.grey,
+            ),
+            const Text(
+              "Programar riego: ",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            const Icon(Icons.alarm_add_rounded),
+            const Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Cuando llegué el tiempo establecido la electroválvula se activara por varios segundos y comenzará a pasar el flujo de agua para humedecer la tierra.",
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.justify,
+              ),
+            ),
+            const Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            IconButton(
+                iconSize: 50,
+                onPressed: () {
+                  debugPrint("Pulsado");
+                },
+                icon: Icon(
+                  color: Colors.grey[350],
+                  Icons.add_circle_outlined,
+                )),
           ],
         );
       }
@@ -333,7 +395,7 @@ class _ListaPageState extends State<ListaPage> {
           return AlertDialog(
             title: const Text("¿Estás seguro de regar la planta?"),
             content: const Text(
-                "La electroválvula se encenderá por 5 segundos aproximadamente"),
+                "La electroválvula se encenderá y permitira el flujo de agua"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -366,5 +428,51 @@ class _ListaPageState extends State<ListaPage> {
             ],
           );
         });
+  }
+
+  Widget _contador() {
+    return Column(
+      children: [
+        const Divider(
+          height: 60,
+          color: Colors.transparent,
+        ),
+        Row(
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(left: 60),
+              child: Text(
+                "Hay un riego programado",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Icon(Icons.alarm_sharp, color: Colors.green),
+          ],
+        ),
+        const Divider(
+          height: 30,
+          color: Colors.transparent,
+        ),
+        const Text(
+          "Comenzará a regarse en: ",
+          style: TextStyle(fontSize: 15),
+        ),
+        CircularCountDownTimer(
+          width: MediaQuery.of(context).size.width / 2,
+          height: MediaQuery.of(context).size.height / 2,
+          duration: _duration + 2,
+          isReverse: true,
+          fillColor: Colors.green[400]!,
+          ringColor: Colors.grey[300]!,
+          onComplete: () {
+            setState(() {});
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _showDatePicker() {
+    return const Text("Hola");
   }
 }
