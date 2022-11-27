@@ -369,8 +369,7 @@ class _ListaPageState extends State<ListaPage> {
             IconButton(
                 iconSize: 50,
                 onPressed: () {
-                  debugPrint("Pulsado");
-                  _showDatePicker();
+                  displayTimePicker(context);
                 },
                 icon: Icon(
                   color: Colors.grey[350],
@@ -413,7 +412,7 @@ class _ListaPageState extends State<ListaPage> {
                   });
                   actuadoresModelo.activo = true;
                   int fechaHoraAct =
-                      DateTime.now().millisecondsSinceEpoch + 40000;
+                      DateTime.now().millisecondsSinceEpoch + 30000;
                   actuadoresModelo.fechaHora = fechaHoraAct ~/ 1000;
                   // print(fechaHoraAct);
                   Future<bool> status =
@@ -473,14 +472,30 @@ class _ListaPageState extends State<ListaPage> {
     );
   }
 
-  _showDatePicker() async {
-    return showDialog(
+  Future displayTimePicker(BuildContext context) async {
+    var time = await showTimePicker(
         context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return TimePickerDialog(
-            initialTime: TimeOfDay.now(),
-          );
-        });
+        initialTime: TimeOfDay(
+            hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute + 1));
+
+    if (time != null) {
+      DateTime dateTimeActual = DateTime.now();
+      int programTime = DateTime(dateTimeActual.year, dateTimeActual.month,
+              dateTimeActual.day, time.hour, time.minute)
+          .millisecondsSinceEpoch;
+
+      setState(() {
+        loanding = true;
+      });
+      actuadoresModelo.activo = true;
+      actuadoresModelo.fechaHora = programTime ~/ 1000;
+      Future<bool> status =
+          SensorProvider().registrarEncendido(actuadoresModelo);
+      status.then((value) => {
+            setState(() {
+              loanding = false;
+            })
+          });
+    }
   }
 }
