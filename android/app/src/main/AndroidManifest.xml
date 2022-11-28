@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.practica_apis">
+    package="com.example.ecotic">
    <application
         android:label="practica_apis"
         android:name="${applicationName}"
