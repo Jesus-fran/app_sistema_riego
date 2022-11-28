@@ -208,13 +208,6 @@ class _ListaPageState extends State<ListaPage> {
                 child: ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: [
-                    // const Center(
-                    //   child: Text(
-                    //     "Regar plantas",
-                    //     style: TextStyle(
-                    //         fontSize: 15, fontWeight: FontWeight.bold),
-                    //   ),
-                    // ),
                     loanding == true
                         ? const LinearProgressIndicator()
                         : _getButton(),
@@ -299,6 +292,23 @@ class _ListaPageState extends State<ListaPage> {
             const Divider(
               height: 10,
               color: Colors.transparent,
+            ),
+            const Text(
+              "Bienvenido Adrian",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const Divider(
+              height: 50,
+              color: Colors.transparent,
+            ),
+            Image.asset(
+              "images/logo1.png",
+              height: 200,
+              width: 200,
+            ),
+            const Divider(
+              height: 100,
+              color: Colors.grey,
             ),
             const Text(
               "Activar el riego ahora mismo: ",
