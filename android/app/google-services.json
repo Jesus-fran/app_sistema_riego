@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "490842894583",
+    "firebase_url": "https://sistemariego-70eeb-default-rtdb.firebaseio.com",
+    "project_id": "sistemariego-70eeb",
+    "storage_bucket": "sistemariego-70eeb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490842894583:android:4f30d2b5e17a4488c9a3f2",
+        "android_client_info": {
+          "package_name": "com.example.ecotic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490842894583-ismg58s7mqf51go5st7cnka4q0o1utqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD14JH_DR2rXoAKoD-Q_Id6XPzbVLpx-oI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490842894583-ismg58s7mqf51go5st7cnka4q0o1utqt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

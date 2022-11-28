@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:practica_apis/routes/routes.dart';
 import 'package:practica_apis/widgets/error404.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

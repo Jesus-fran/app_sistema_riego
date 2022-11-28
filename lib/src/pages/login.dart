@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Loginpage extends StatefulWidget {
@@ -92,9 +93,7 @@ class _LoginpageState extends State<Loginpage> {
                   onTap: () {
                     if (_formfield.currentState!.validate()) {
                       debugPrint("datos login agregado correctamente");
-                      emailController.clear();
-                      passController.clear();
-                      Navigator.pushReplacementNamed(context, '/home');
+                      signIn();
                       // Navigator.pushNamed(context, '/home');
                     }
                   },
@@ -143,5 +142,26 @@ class _LoginpageState extends State<Loginpage> {
         ),
       ),
     );
+  }
+
+  Future signIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passController.text);
+      emailController.clear();
+      passController.clear();
+      Navigator.pushReplacementNamed(context, '/home');
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      passController.clear();
+      SnackBar snack_1 = const SnackBar(
+        content: Text(
+          "Email o contraseña incorrecta :(",
+          style: TextStyle(color: Colors.red),
+        ),
+        duration: Duration(seconds: 8),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snack_1);
+    }
   }
 }

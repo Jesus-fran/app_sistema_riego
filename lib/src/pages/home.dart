@@ -1,4 +1,5 @@
 // import 'package:app_riego/src/models/sensor_modelo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practica_apis/src/pages/humedad.dart';
 import 'package:practica_apis/src/pages/mapa.dart';
@@ -294,9 +295,14 @@ class _ListaPageState extends State<ListaPage> {
               color: Colors.transparent,
             ),
             const Text(
-              "Bienvenido Adrian",
+              "Bienvenido",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            const Divider(
+              height: 10,
+              color: Colors.transparent,
+            ),
+            const Icon(Icons.tag_faces_sharp, color: Colors.green),
             const Divider(
               height: 50,
               color: Colors.transparent,
