@@ -140,4 +140,16 @@ class SensorProvider {
     }
     return editado;
   }
+
+  Future<bool> cancelarRiego(ActuadoresModelo datos) async {
+    //variables
+    bool editado = false;
+    final url = '$_url/actuadores/valvula/accion.json';
+    final respuesta =
+        await http.put(Uri.parse(url), body: actuadoresModeloToJson(datos));
+    if (respuesta.statusCode == 200) {
+      editado = true;
+    }
+    return editado;
+  }
 }

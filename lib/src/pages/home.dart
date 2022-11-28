@@ -412,7 +412,7 @@ class _ListaPageState extends State<ListaPage> {
                   });
                   actuadoresModelo.activo = true;
                   int fechaHoraAct =
-                      DateTime.now().millisecondsSinceEpoch + 30000;
+                      DateTime.now().millisecondsSinceEpoch + 3000;
                   actuadoresModelo.fechaHora = fechaHoraAct ~/ 1000;
                   // print(fechaHoraAct);
                   Future<bool> status =
@@ -468,6 +468,26 @@ class _ListaPageState extends State<ListaPage> {
             setState(() {});
           },
         ),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              loanding = true;
+            });
+            actuadoresModelo.activo = false;
+            actuadoresModelo.fechaHora = 0;
+            Future<bool> status =
+                SensorProvider().cancelarRiego(actuadoresModelo);
+            status.then((value) => {
+                  setState(() {
+                    loanding = false;
+                  })
+                });
+          },
+          child: const Text(
+            "Cancelar riego",
+            style: TextStyle(color: Colors.green),
+          ),
+        )
       ],
     );
   }
