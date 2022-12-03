@@ -4,6 +4,10 @@
 <dict>
     <key> NSCameraUsageDescription </key>
     <string> Se necesita acceso a tu cámara para tomar fotos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Se necesita acceso al servicio de localización</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+    <string>Se necesita acceso al servicio de localización en segundo plano</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

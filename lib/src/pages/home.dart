@@ -1,5 +1,4 @@
 // import 'package:app_riego/src/models/sensor_modelo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practica_apis/src/pages/humedad.dart';
 import 'package:practica_apis/src/pages/mapa.dart';
@@ -189,6 +188,21 @@ class _ListaPageState extends State<ListaPage> {
                     color: Color.fromARGB(255, 24, 129, 89),
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.location_on,
+                  size: 30,
+                  color: Color.fromARGB(255, 26, 163, 56),
+                ),
+                title: const Text(
+                  "Mi ubicación",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(context, "/actual_localizacion");
+                },
               ),
               ListTile(
                 leading: const Icon(

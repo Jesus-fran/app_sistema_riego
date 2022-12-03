@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practica_apis/src/pages/actuadores.dart';
+import 'package:practica_apis/src/pages/actual_localizacion.dart';
 import 'package:practica_apis/src/pages/foto.dart';
 import 'package:practica_apis/src/pages/home.dart';
 import 'package:practica_apis/src/pages/humedad.dart';
@@ -18,5 +19,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     '/sensores': (BuildContext context) => const Sensores(),
     '/actuadores': (BuildContext context) => const Actuadores(),
     '/foto': (BuildContext context) => const Foto(),
+    '/actual_localizacion': (BuildContext context) =>
+        const ActualLocalizacion(),
   };
 }
