@@ -164,6 +164,21 @@ class _ListaPageState extends State<ListaPage> {
                   Navigator.pushNamed(context, '/videos');
                 },
               ),
+              ListTile(
+                leading: const Icon(
+                  Icons.photo,
+                  size: 30,
+                  color: Colors.indigo,
+                ),
+                title: const Text(
+                  "Fotos",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/foto');
+                },
+              ),
               const Divider(
                 height: 10,
                 color: Color.fromARGB(50, 151, 151, 151),
