@@ -193,7 +193,7 @@ class _SensoresState extends State<Sensores> {
             title: const Text(
                 "No es posible encender o apagar este sensor, no está conectado a un réle."),
             content: const Text(
-                "Su estado no afecta el funcionamiento y vida del LM35"),
+                "Su estado no afecta el funcionamiento y vida del sensor"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -249,7 +249,7 @@ class _SensoresState extends State<Sensores> {
                     }
                   : (bool value) {
                       active = value;
-                      _showDialog();
+                      _showDialogLm35();
                     },
             ),
           ],

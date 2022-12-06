@@ -212,61 +212,11 @@ class _LoginpageState extends State<Loginpage> {
       });
       return null;
     } on FirebaseAuthException catch (e) {
-      if (e.code == "invalid-email") {
-        setState(() {
-          passReseted = true;
-          msgReset = const Text("Email inválido");
-        });
-      }
-      if (e.code == "missing-android-pkg-name") {
-        setState(() {
-          passReseted = true;
-          msgReset = const Text("Falta un paquete de android");
-        });
-      }
-      if (e.code == "missing-continue-uri") {
-        setState(() {
-          passReseted = true;
-          msgReset = const Text(
-              "Se debe proporcionar una URL de continuación en la solicitud.");
-        });
-      }
-      if (e.code == "missing-ios-bundle-id") {
-        setState(() {
-          passReseted = true;
-          msgReset =
-              const Text("Se debe proporcionar una ID de paquete de iOS");
-        });
-      }
-      if (e.code == "invalid-continue-uri") {
-        setState(() {
-          passReseted = true;
-          msgReset = const Text(
-              "La URL de continuación proporcionada en la solicitud no es válida.");
-        });
-      }
-      if (e.code == "unauthorized-continue-uri") {
-        setState(() {
-          passReseted = true;
-          msgReset = const Text(
-              "El dominio de la URL de continuación no está en la lista blanca. Incluya el dominio en la lista blanca en Firebase console.");
-        });
-      }
-      if (e.code == "user-not-found") {
-        setState(() {
-          passReseted = true;
-          msgReset = const Text("Este usuario no existe");
-        });
-      }
-
-      if (e.message == "user-not-found") {
-        setState(() {
-          passReseted = true;
-          msgReset = const Text("Este usuario no existe");
-        });
-      }
-      print(e.message);
-      // return e.code
+      setState(() {
+        passReseted = true;
+        msgReset = const Text(
+            "Coreo no registrado o inválido, verifique si escribió bien");
+      });
     }
   }
 }
