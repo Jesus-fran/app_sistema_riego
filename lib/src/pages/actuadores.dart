@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:practica_apis/src/models/actuadores_modelo.dart';
+import 'package:practica_apis/src/models/historial_modelo.dart';
 import 'package:practica_apis/src/providers/sensores_provider.dart';
 
 class Actuadores extends StatefulWidget {
@@ -67,7 +67,7 @@ class _ActuadoresState extends State<Actuadores> {
         FutureBuilder(
           future: SensorProvider().getHistorialValvula(),
           builder: (BuildContext context,
-              AsyncSnapshot<List<ActuadoresModelo>> snapshot) {
+              AsyncSnapshot<List<HistorialModelo>> snapshot) {
             if (snapshot.hasData) {
               return _detalles(snapshot.data!);
             } else {
@@ -79,7 +79,7 @@ class _ActuadoresState extends State<Actuadores> {
     );
   }
 
-  Widget _detalles(List<ActuadoresModelo> datos) {
+  Widget _detalles(List<HistorialModelo> datos) {
     String fechaHora = "";
     String hora = "";
     if (datos[0].fechaHora == 0) {

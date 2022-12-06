@@ -1,5 +1,6 @@
 // import 'package:app_riego/src/models/sensor_modelo.dart';
 import 'package:flutter/material.dart';
+import 'package:practica_apis/src/models/historial_modelo.dart';
 import 'package:practica_apis/src/pages/humedad.dart';
 import 'package:practica_apis/src/pages/mapa.dart';
 import 'package:practica_apis/src/pages/temperatura.dart';
@@ -18,6 +19,7 @@ class ListaPage extends StatefulWidget {
 class _ListaPageState extends State<ListaPage> {
   bool loanding = false;
   int _duration = 10;
+  bool respWaint = false;
   ActuadoresModelo actuadoresModelo = ActuadoresModelo();
 
   @override
@@ -258,7 +260,7 @@ class _ListaPageState extends State<ListaPage> {
     return FutureBuilder(
       future: SensorProvider().getHistorialValvula(),
       builder: (BuildContext context,
-          AsyncSnapshot<List<ActuadoresModelo>> snapshot) {
+          AsyncSnapshot<List<HistorialModelo>> snapshot) {
         if (snapshot.hasData) {
           return FutureBuilder(
             future: SensorProvider().getAccionValvula(),
@@ -279,7 +281,7 @@ class _ListaPageState extends State<ListaPage> {
     );
   }
 
-  Widget _button(List<ActuadoresModelo> datos1, List<ActuadoresModelo> datos2) {
+  Widget _button(List<HistorialModelo> datos1, List<ActuadoresModelo> datos2) {
     if (datos1[0].activo == false) {
       // Si es false, significa que la electrovalvula está apagada
       int fechaHoraFb = datos2[0].fechaHora * 1000;
@@ -425,10 +427,52 @@ class _ListaPageState extends State<ListaPage> {
       }
     } else {
       // Si no es false, entonces es true, significa que está regando...
-      return const Center(
-        child: Text("Regando...",
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-      );
+      if (!datos2[0].programed) {
+        return Column(
+          children: [
+            const Text("Regando...",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            const Divider(
+              color: Colors.transparent,
+              height: 70,
+            ),
+            const Text(
+              "Dejar de regar: ",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            const Icon(Icons.arrow_right_alt_rounded),
+            const Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            SizedBox(
+              height: 70,
+              // width: 200,
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: Switch(
+                  // inactiveThumbColor: Colors.blueGrey.shade600,
+                  // inactiveTrackColor: Color.fromARGB(255, 216, 8, 8),
+                  activeColor: Colors.green,
+                  value: datos1[0].activo,
+                  onChanged: (value) {
+                    _showDialog2();
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      } else {
+        return const Center(
+          child: Text("Regando...",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+        );
+      }
     }
   }
 
@@ -459,13 +503,73 @@ class _ListaPageState extends State<ListaPage> {
                   int fechaHoraAct =
                       DateTime.now().millisecondsSinceEpoch + 3000;
                   actuadoresModelo.fechaHora = fechaHoraAct ~/ 1000;
+                  actuadoresModelo.programed = false;
+                  // print(fechaHoraAct);
+                  Future<bool> status =
+                      SensorProvider().registrarEncendido(actuadoresModelo);
+
+                  status.then((value) => {
+                        _reloaded(true),
+                      });
+                },
+                child: const Text("SI"),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _reloaded(bool dataWait) async {
+    await Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      Future<bool> estadoHis = SensorProvider().getLastHistorial();
+      estadoHis.then((value) {
+        debugPrint(value.toString());
+        if (value == dataWait) {
+          setState(() {
+            loanding = false;
+          });
+          return false;
+        }
+      });
+      return true;
+    });
+    //}
+  }
+
+  Future<void> _showDialog2() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("¿Estás seguro?"),
+            content: const Text(
+                "La electroválvula se apagará y no permitira el flujo de agua"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("NO"),
+              ),
+              TextButton(
+                onPressed: () {
+                  // _regar();
+                  Navigator.of(context).pop();
+                  setState(() {
+                    loanding = true;
+                  });
+                  actuadoresModelo.activo = false;
+                  int fechaHoraAct =
+                      DateTime.now().millisecondsSinceEpoch + 3000;
+                  actuadoresModelo.fechaHora = fechaHoraAct ~/ 1000;
+                  actuadoresModelo.programed = false;
                   // print(fechaHoraAct);
                   Future<bool> status =
                       SensorProvider().registrarEncendido(actuadoresModelo);
                   status.then((value) => {
-                        setState(() {
-                          loanding = false;
-                        })
+                        _reloaded(false),
                       });
                 },
                 child: const Text("SI"),
@@ -505,7 +609,7 @@ class _ListaPageState extends State<ListaPage> {
         CircularCountDownTimer(
           width: MediaQuery.of(context).size.width / 2,
           height: MediaQuery.of(context).size.height / 2,
-          duration: _duration + 2,
+          duration: _duration + 15,
           isReverse: true,
           fillColor: Colors.green[400]!,
           ringColor: Colors.grey[300]!,
@@ -554,6 +658,8 @@ class _ListaPageState extends State<ListaPage> {
       });
       actuadoresModelo.activo = true;
       actuadoresModelo.fechaHora = programTime ~/ 1000;
+      actuadoresModelo.programed = true;
+
       Future<bool> status =
           SensorProvider().registrarEncendido(actuadoresModelo);
       status.then((value) => {

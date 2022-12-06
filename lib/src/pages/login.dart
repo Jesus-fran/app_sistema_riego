@@ -9,6 +9,9 @@ class Loginpage extends StatefulWidget {
 }
 
 class _LoginpageState extends State<Loginpage> {
+  Widget msgReset = LinearProgressIndicator();
+  bool passReseted = false;
+
   // final FirebaseAuth = _auth = FirebaseAuth.instance;
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -126,7 +129,10 @@ class _LoginpageState extends State<Loginpage> {
                       ),
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _showDialog();
+                          enviarLinkdeRestablecer();
+                        },
                         child: const Text(
                           "recuperar",
                           style: TextStyle(
@@ -162,6 +168,105 @@ class _LoginpageState extends State<Loginpage> {
         duration: Duration(seconds: 8),
       );
       ScaffoldMessenger.of(context).showSnackBar(snack_1);
+    }
+  }
+
+  Future<void> _showDialog() async {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: msgReset,
+            // content: msgReset,
+            actions: <Widget>[
+              TextButton(
+                onPressed: passReseted
+                    ? () {
+                        Navigator.of(context).pop();
+                      }
+                    : null,
+                child: const Center(child: Text("ACEPTAR")),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future enviarLinkdeRestablecer() async {
+    // if (emailController.text == "") {
+    //   setState(() {
+    //     passReseted = true;
+    //     msgReset = const Text("Debe ingresar primero su correo");
+    //   });
+    //   return null;
+    // }
+
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailController.text);
+      setState(() {
+        passReseted = true;
+        msgReset = const Text(
+            "Se le envío un email a su cuenta para restablecer su contraseña");
+      });
+      return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "invalid-email") {
+        setState(() {
+          passReseted = true;
+          msgReset = const Text("Email inválido");
+        });
+      }
+      if (e.code == "missing-android-pkg-name") {
+        setState(() {
+          passReseted = true;
+          msgReset = const Text("Falta un paquete de android");
+        });
+      }
+      if (e.code == "missing-continue-uri") {
+        setState(() {
+          passReseted = true;
+          msgReset = const Text(
+              "Se debe proporcionar una URL de continuación en la solicitud.");
+        });
+      }
+      if (e.code == "missing-ios-bundle-id") {
+        setState(() {
+          passReseted = true;
+          msgReset =
+              const Text("Se debe proporcionar una ID de paquete de iOS");
+        });
+      }
+      if (e.code == "invalid-continue-uri") {
+        setState(() {
+          passReseted = true;
+          msgReset = const Text(
+              "La URL de continuación proporcionada en la solicitud no es válida.");
+        });
+      }
+      if (e.code == "unauthorized-continue-uri") {
+        setState(() {
+          passReseted = true;
+          msgReset = const Text(
+              "El dominio de la URL de continuación no está en la lista blanca. Incluya el dominio en la lista blanca en Firebase console.");
+        });
+      }
+      if (e.code == "user-not-found") {
+        setState(() {
+          passReseted = true;
+          msgReset = const Text("Este usuario no existe");
+        });
+      }
+
+      if (e.message == "user-not-found") {
+        setState(() {
+          passReseted = true;
+          msgReset = const Text("Este usuario no existe");
+        });
+      }
+      print(e.message);
+      // return e.code
     }
   }
 }
